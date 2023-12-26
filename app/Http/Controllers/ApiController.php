@@ -41,67 +41,72 @@ class ApiController extends Controller
 
         $skipFirst = true;
         $weatherIconClasses = [
-            "395" => "wi-thunderstorm",
-            "392" => "wi-thunderstorm",
-            "389" => "wi-thunderstorm",
-            "386" => "wi-thunderstorm",
-            "377" => "wi-sleet",
-            "374" => "wi-sleet",
-            "371" => "wi-snow",
-            "368" => "wi-snow",
-            "365" => "wi-sleet",
-            "362" => "wi-sleet",
-            "359" => "wi-showers",
-            "356" => "wi-showers",
-            "353" => "wi-showers",
-            "350" => "wi-sleet",
-            "338" => "wi-snow",
-            "335" => "wi-snow",
-            "332" => "wi-snow",
-            "329" => "wi-snow",
-            "326" => "wi-snow",
-            "323" => "wi-snow",
-            "320" => "wi-sleet",
-            "317" => "wi-sleet",
-            "314" => "wi-sleet",
-            "311" => "wi-sleet",
-            "308" => "wi-showers",
-            "305" => "wi-showers",
-            "302" => "wi-showers",
-            "299" => "wi-showers",
-            "296" => "wi-showers",
-            "293" => "wi-showers",
-            "284" => "wi-sleet",
-            "281" => "wi-sleet",
-            "266" => "wi-showers",
-            "263" => "wi-showers",
-            "260" => "wi-fog",
-            "248" => "wi-fog",
-            "230" => "wi-snow",
-            "227" => "wi-snow",
-            "200" => "wi-thunderstorm",
-            "185" => "wi-sleet",
-            "182" => "wi-sleet",
-            "179" => "wi-snow",
-            "176" => "wi-showers",
-            "143" => "wi-fog",
-            "122" => "wi-cloudy",
-            "119" => "wi-cloudy",
-            "116" => "wi-day-cloudy",
-            "113" => "wi-day-sunny",
+            "395" => "thunder",
+            "392" => "snowy-4",
+            "389" => "rainy-5",
+            "386" => "rainy-4",
+            "377" => "snowy-4",
+            "374" => "rainy-6",
+            "371" => "snowy-5",
+            "368" => "snowy-3",
+            "365" => "snowy-4",
+            "362" => "snowy-3",
+            "359" => "rainy-7",
+            "356" => "rainy-6",
+            "353" => "rainy-5",
+            "350" => "snowy-6",
+            "338" => "snowy-6",
+            "335" => "snowy-6",
+            "332" => "snowy-5",
+            "329" => "snowy-5",
+            "326" => "snowy-4",
+            "323" => "snowy-4",
+            "320" => "snowy-3",
+            "317" => "snowy-3",
+            "314" => "rainy-5",
+            "311" => "rainy-5",
+            "308" => "rainy-7",
+            "305" => "rainy-7",
+            "302" => "rainy-5",
+            "299" => "rainy-5",
+            "296" => "rainy-3",
+            "293" => "rainy-2",
+            "284" => "rainy-4",
+            "281" => "rainy-5",
+            "266" => "rainy-1",
+            "263" => "rainy-1",
+            "260" => "snowy-6",
+            "248" => "cloudy",
+            "230" => "snowy-6",
+            "227" => "snowy-6",
+            "200" => "thunder",
+            "185" => "rainy-1",
+            "182" => "rainy-2",
+            "179" => "snowy-1",
+            "176" => "rainy-2",
+            "143" => "cloudy",
+            "122" => "cloudy",
+            "119" => "cloudy-day-1",
+            "116" => "cloudy-day-2",
+            "113" => "cloudy-day-3"
         ];
+        $currentYear = Carbon::now()->year;
+        $currentMonth = Carbon::now()->month;
 
-        $jsonFilePath = storage_path("app/responses/{$sehirAdi}.json");
+        $weatherJsonFilePath = storage_path("app/responses/{$sehirAdi}.json");
+        $prayerJsonFilePath = storage_path("app/responses/prayerTime/{$sehirAdi}/{$sehirAdi}-{$currentYear}-{$currentMonth}.json");
 
-        if (File::exists($jsonFilePath)) {
-            $jsonData = json_decode(file_get_contents($jsonFilePath), true);
+
+        if (File::exists($weatherJsonFilePath)) {
+            $jsonData = json_decode(file_get_contents($weatherJsonFilePath), true);
+            $prayerJsonData = json_decode(file_get_contents($prayerJsonFilePath), true);
+
 
             $now = Carbon::now();
             $sehirAdi = ucfirst($sehirAdi);
-
-            return view('welcome', compact('jsonData', 'sehirAdi', 'now','skipFirst','weatherIconClasses'));
+            return view('welcome', compact('jsonData', 'prayerJsonData', 'sehirAdi', 'now', 'skipFirst', 'weatherIconClasses'));
         } else {
-            // Belirtilen şehir adına ait JSON dosyası bulunamadı.
+            // Belirtilen şehir adına ait veri yok.
             abort(404);
         }
     }

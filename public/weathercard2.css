@@ -31,23 +31,11 @@ body {
     font-size:7rem;
     line-height: .8;
   }
-  .weather__card h3 {
-    font-size: 40px;
-    font-weight: 600;
-    line-height: .8;
-    color:#3C4048;
-  }
-  .weather__card h5 {
-    font-size: 20px;
-    font-weight: 400;
-    line-height: .1;
-    color:#9D9D9D;
-  }
-  .weather__card img {
-    width: 120px;
-    height: 120px;
-  }
-  .weather__card .weather__description {
+  
+  
+  
+  
+  .weather__description {
     background-color: #fff;
     border-radius: 25px;
     padding: 5px 13px;
@@ -57,6 +45,9 @@ body {
     font-size: .956rem;
     font-weight: 400;
   }
+ td{
+  vertical-align: middle;
+ }
   /*--------------------------------------------------------------
   # Weather Status
   --------------------------------------------------------------*/
@@ -72,7 +63,10 @@ body {
     padding-left: .5rem;
   }
   .text-color{
-    color: #F99E87;
+    color: #39A7FF;
+  }
+  .text-color-2{
+    color:#FFA508
   }
   /*--------------------------------------------------------------
   # Weather Forecast
@@ -81,8 +75,8 @@ body {
     overflow-x: auto;
   }
   .hourly img {
-    height: 25px;
-    width: 25px;
+    height: 50px;
+    width: 50px;
     vertical-align:middle;
     
   }

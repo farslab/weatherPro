@@ -8,11 +8,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\File;
-use Log;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
-class ApiRequestJob implements ShouldQueue
+class PrayerTimeApi implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -27,11 +28,7 @@ class ApiRequestJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle() : void
-    {
-        $this->apiRequest();
-    }
-    public function apiRequest()
+    public function handle(): void
     {
         $sehirler = ['adana', 'adiyaman', 'afyonkarahisar', 'agri', 'amasya', 'ankara', 'antalya', 'artvin', 
         'aydin', 'balikesir', 'bilecik', 'bingol', 'bitlis', 'bolu', 'burdur', 'bursa', 'canakkale', 'cankiri', 
@@ -43,20 +40,26 @@ class ApiRequestJob implements ShouldQueue
         'aksaray', 'bayburt', 'karaman', 'kirikkale', 'batman', 'sirnak', 'bartin', 'ardahan', 'igdir', 'yalova',
         'karabuk', 'kilis', 'osmaniye', 'duzce'];
 
-        $apiKey = '42b55a2e45d54585be7202904232012';
-        $baseUrl = 'http://api.worldweatheronline.com/premium/v1/weather.ashx';
-
+        $baseUrl = 'https://api.aladhan.com/v1/calendarByCity';
+        $currentYear = Carbon::now()->year;
+        $currentMonth = Carbon::now()->month;
         foreach ($sehirler as $sehir) {
-            $url = "$baseUrl?key=$apiKey&q=$sehir,turkey&format=json&num_of_days=5&showlocaltime=yes&lang=tr";
+            $url = "$baseUrl/$currentYear/$currentMonth?city=$sehir&country=turkey&method=13";
             $response = Http::get($url);
+            $directoryPath = storage_path("app/responses/prayerTime/$sehir");
+            $jsonFilePath = "$directoryPath/$sehir-$currentYear-$currentMonth.json";
+
+            if (!File::isDirectory($directoryPath)) {
+                File::makeDirectory($directoryPath, 0755, true, true);
+            }
+            File::put($jsonFilePath, $response->body());
 
             if ($response->successful()) {
-                $jsonFilePath = storage_path("app/responses/$sehir.json");
-                File::put($jsonFilePath, $response->body());
-                Log::info("Cevap $sehir.json dosyasına kaydedildi.");
+                Log::info("Namaz Vakitleri $sehir.json dosyasına kaydedildi. Url= $url");
             } else {
-                Log::error("Hata: $sehir için API isteği başarısız oldu.");
+                Log::error("Hata: $sehir için API isteği başarısız oldu.Url= $url");
             }
         }
     }
+    
 }
