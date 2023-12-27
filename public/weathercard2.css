@@ -1,9 +1,19 @@
 
 @font-face {
   font-family: 'Jost';
-  src: url('fonts/Jost-500.woff') format('woff');
+  src: url('fonts/Jost-500.woff') format('woff'),
+       url('fonts/Jost-Regular.ttf') format('ttf'),
+       url('fonts/Jost-500.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
+}
+@font-face {
+  font-family: 'Jost';
+  src: url('fonts/Jost-600.woff') format('woff'),
+       url('fonts/Jost-Regular.ttf') format('ttf'),
+       url('fonts/Jost-500.woff2') format('woff2');
+  font-weight:bold;
+  font-style:normal;
 }
 
 body {
@@ -14,7 +24,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
   }
   h1, h2, h3, h4, h5, h6 {
-    margin: 0 0 15px 0;
     padding: 0;
     font-family: "Jost", sans-serif;
     font-weight:600;
@@ -22,18 +31,6 @@ body {
   /*--------------------------------------------------------------
   # Weather Card
   --------------------------------------------------------------*/
-  .weather__card {
-    padding: 40px 30px;
-    border-radius: 20px;
-    color:#3C4048;
-  }
-  .weather__card h2 {
-    font-size:7rem;
-    line-height: .8;
-  }
-  
-  
-  
   
   .weather__description {
     background-color: #fff;

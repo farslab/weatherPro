@@ -30,24 +30,26 @@ class PrayerTimeApi implements ShouldQueue
      */
     public function handle(): void
     {
-        $sehirler = ['adana', 'adiyaman', 'afyonkarahisar', 'agri', 'amasya', 'ankara', 'antalya', 'artvin', 
-        'aydin', 'balikesir', 'bilecik', 'bingol', 'bitlis', 'bolu', 'burdur', 'bursa', 'canakkale', 'cankiri', 
-        'corum', 'denizli', 'diyarbakir', 'edirne', 'elazig', 'erzincan', 'erzurum', 'eskisehir', 'gaziantep', 
-        'giresun', 'gumushane', 'hakkari', 'hatay', 'isparta', 'mersin', 'istanbul', 'izmir', 'kars', 'kastamonu',
-        'kayseri', 'kirklareli', 'kirsehir', 'kocaeli', 'konya', 'kutahya', 'malatya', 'manisa', 'kahramanmaras', 
-        'mardin', 'mugla', 'mus', 'nevsehir', 'nigde', 'ordu', 'rize', 'sakarya', 'samsun', 'siirt', 'sinop', 
-        'sivas', 'tekirdag', 'tokat', 'trabzon', 'tunceli', 'sanliurfa', 'usak', 'van', 'yozgat', 'zonguldak', 
-        'aksaray', 'bayburt', 'karaman', 'kirikkale', 'batman', 'sirnak', 'bartin', 'ardahan', 'igdir', 'yalova',
-        'karabuk', 'kilis', 'osmaniye', 'duzce'];
+        $sehirler = [
+            'Adana', 'Adıyaman', 'Afyonkarahisar', 'Ağrı', 'Amasya', 'Ankara', 'Antalya', 'Artvin',
+            'Aydın', 'Balıkesir', 'Bilecik', 'Bingöl', 'Bitlis', 'Bolu', 'Burdur', 'Bursa', 'Çanakkale', 'Çankırı',
+            'Çorum', 'Denizli', 'Diyarbakır', 'Edirne', 'Elazığ', 'Erzincan', 'Erzurum', 'Eskişehir', 'Gaziantep',
+            'Giresun', 'Gümüşhane', 'Hakkâri', 'Hatay', 'Isparta', 'Mersin', 'İstanbul', 'İzmir', 'Kars', 'Kastamonu',
+            'Kayseri', 'Kırklareli', 'Kırşehir', 'Kocaeli', 'Konya', 'Kütahya', 'Malatya', 'Manisa', 'Kahramanmaraş',
+            'Mardin', 'Muğla', 'Muş', 'Nevşehir', 'Niğde', 'Ordu', 'Rize', 'Sakarya', 'Samsun', 'Siirt', 'Sinop',
+            'Sivas', 'Tekirdağ', 'Tokat', 'Trabzon', 'Tunceli', 'Şanlıurfa', 'Uşak', 'Van', 'Yozgat', 'Zonguldak',
+            'Aksaray', 'Bayburt', 'Karaman', 'Kırıkkale', 'Batman', 'Şırnak', 'Bartın', 'Ardahan', 'Iğdır', 'Yalova',
+            'Karabük', 'Kilis', 'Osmaniye', 'Düzce'
+        ];
+        
+        $baseUrl = 'https://namaz-vakti.vercel.app/api/timesFromPlace?country=Turkey&region=';
 
-        $baseUrl = 'https://api.aladhan.com/v1/calendarByCity';
-        $currentYear = Carbon::now()->year;
-        $currentMonth = Carbon::now()->month;
+        $currentDate=Carbon::now()->format('Y-m-d');
         foreach ($sehirler as $sehir) {
-            $url = "$baseUrl/$currentYear/$currentMonth?city=$sehir&country=turkey&method=13";
+            $url = "$baseUrl$sehir&city=$sehir&date=$currentDate&days=30&timezoneOffset=180&calculationMethod=Turkey";
             $response = Http::get($url);
             $directoryPath = storage_path("app/responses/prayerTime/$sehir");
-            $jsonFilePath = "$directoryPath/$sehir-$currentYear-$currentMonth.json";
+            $jsonFilePath = "$directoryPath/$sehir.json";
 
             if (!File::isDirectory($directoryPath)) {
                 File::makeDirectory($directoryPath, 0755, true, true);
